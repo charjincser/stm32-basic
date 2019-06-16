@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+#include <stm32f10x.h>
+#include <stm32f10x_it.h>
+#include <stm32f10x_conf.h>
+
+#define led_gpio GPIOC
+/*#define led1 GPIO_Pin_6
+#define led2 GPIO_Pin_7
+#define led3 GPIO_Pin_8
+#define led4 GPIO_Pin_9
+
+#define led_turn1 GPIO_WriteBit(led_gpio,led1,(BitAction)!GPIO_ReadOutputDataBit(led_gpio,led1))
+#define led_turn2 GPIO_WriteBit(led_gpio,led2,(BitAction)!GPIO_ReadOutputDataBit(led_gpio,led2))
+#define led_turn3 GPIO_WriteBit(led_gpio,led3,(BitAction)!GPIO_ReadOutputDataBit(led_gpio,led3))
+#define led_turn4 GPIO_WriteBit(led_gpio,led4,(BitAction)!GPIO_ReadOutputDataBit(led_gpio,led4))
+*/
+void led_init()
+{
+	/*GPIO_InitTypeDef GPIO_InitStructure;
+	RCC_APB2PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP | RCC_APB2Periph_GPIOC,ENABLE);
+	GPIO_InitStructure.GPIO_Pin = led1 | led2 | led3 | led4;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(led_gpio,&GPIO_InitStructure);*/
+	GPIOC->CRL=0x33000000;
+  GPIOC->CRH=0x00000033;
+}
+
+void delay_ms(unsigned int Counter)
+{
+	unsigned int i;
+	for(;Counter!=0; Counter--)
+	{
+		i=10301;
+		while(i--);
+	}
+}
+void turnOn4lights(){
+	GPIOC -> BSRR = 0x03c0;		//set the 4 bits((6,7,8,9)) to "1" 
+	delay_ms(500);
+	GPIOC -> BRR = 0x03c0;		//reset the 4 bits linked to shown leds.
+	delay_ms(500);
+}
+
+void showWaterLights(){
+	// use BSRR(set and reset)
+	// only one led light is turned on at a time
+	GPIOC -> BSRR = 0x03800040;
+	delay_ms(500);
+	GPIOC -> BSRR = 0x03400080;
+	delay_ms(500);
+	GPIOC -> BSRR = 0x02c00100;
+	delay_ms(500);
+	GPIOC -> BSRR = 0x01c002c0;
+	delay_ms(500);
+}
+
+void turnOn67Off89(){
+	// The situation of "setting and resetting" at the same time.
+	// BSRR
+	GPIOC -> BSRR = 0x01400280;
+	delay_ms(500);
+	GPIOC -> BSRR = 0x02800140;
+	delay_ms(500);
+}
+
+
+/*
+		led_turn1;
+		delay_ms(500);
+		GPIO_ResetBits(led_gpio,led1 | led2 | led3 | led4);
+		
+		led_turn2;
+		delay_ms(500);
+		GPIO_ResetBits(led_gpio,led1 | led2 | led3 | led4);
+		
+		led_turn3;
+		delay_ms(500);
+		GPIO_ResetBits(led_gpio,led1 | led2 | led3 | led4);
+		
+		led_turn4;
+		delay_ms(500);
+		GPIO_ResetBits(led_gpio,led1 | led2 | led3 | led4);
+*/
