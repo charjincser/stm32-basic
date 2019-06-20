@@ -1,11 +1,6 @@
 #include <dma.h>
 
-// extern u8 RECEBUF; //目前接收缓冲
-// extern u8 RECEBUFSIZE;
-// extern u8 USART1_BUF[][RECRBUFSIZE];
-// extern DMA_InitTypeDef DMA_InitStructure5;
-
-extern char USART12_BUF[][15];
+extern char USART12_BUF[][SENDBUFSIZE];
 extern DMA_InitTypeDef DMA_InitStructure4;
 extern DMA_InitTypeDef DMA_InitStructure7;
 
@@ -49,9 +44,9 @@ void dma4_configuration(void)
  */
 void dma7_configuration(void)
 {
-    DMA_DeInit(DMA1_Channel5); //复位DMA通道5配置
-    DMA_InitStructure7.DMA_PeripheralBaseAddr = (u32)SRC_USART1_DR;
-    //设置DMA4外设基地址为串口1发送地址
+    DMA_DeInit(DMA1_Channel7); //复位DMA通道7配置
+    DMA_InitStructure7.DMA_PeripheralBaseAddr = (u32)SRC_USART2_DR;
+    //设置DMA7外设基地址为串口2发送地址
     DMA_InitStructure7.DMA_MemoryBaseAddr = (u32)(USART12_BUF[1]);
     //设置内存地址为发送缓冲区首地址
     DMA_InitStructure7.DMA_DIR = DMA_DIR_PeripheralSRC;
@@ -72,6 +67,6 @@ void dma7_configuration(void)
     //DMA中优先级
     DMA_InitStructure7.DMA_M2M = DMA_M2M_Disable;
     //不是内存到内存
-    DMA_Init(DMA1_Channel5, &DMA_InitStructure7);
+    DMA_Init(DMA1_Channel7, &DMA_InitStructure7);
     //按以上参数执行初始化
 }

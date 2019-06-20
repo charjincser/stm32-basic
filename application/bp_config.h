@@ -62,6 +62,7 @@ void delay_ms(INT8U ms);
 #define spi3_miso GPIO_Pin_4
 #define spi3_cs GPIO_Pin_11
 
-#define SRC_USART1_DR (&(USART1 -> DR)) 
+#define SRC_USART1_DR (&(USART1->DR))
+#define SRC_USART2_DR (&(USART2->DR))
 
 #endif
