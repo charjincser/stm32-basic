@@ -1,26 +1,31 @@
 #include <dma.h>
 
+// extern u8 RECEBUF; //目前接收缓冲
+// extern u8 RECEBUFSIZE;
+// extern u8 USART1_BUF[][RECRBUFSIZE];
+// extern DMA_InitTypeDef DMA_InitStructure5;
+
+extern u8 SENDBUF_INDEX; //这里表示将哪一段用作发送缓冲区
+extern SENDBUFSIZE;      //发送缓冲区大小
+
+extern char USART12_BUF[][SENDBUFSIZE];
 extern DMA_InitTypeDef DMA_InitStructure4;
-extern DMA_InitTypeDef DMA_InitStructure5;
-extern USART1_BUF;
+extern DMA_InitTypeDef DMA_InitStructure7;
 
-extern u8 RECEBUF; //目前接收缓冲
-extern u8 SENDBUF; //目前发送缓冲
-extern u8 DMASEND; //0表示目前DMA不在发送状态
-                   //I表示在发送
-extern u8 DMARECE; //0表示串口接收DMA中断未发生，即从上次接收到一组数据并处理后，未接收完一组新的数据
-                   //I表示串口 DMA中断刚发生,数据等待处理
-extern u8 RECEBUFSIZE;
-
+/**
+ * 课本P32
+ * DMA4 配置函数
+ * 通道4为串口1数据发送
+ */
 void dma4_configuration(void)
 {
     DMA_DeInit(DMA1_Channel4);
     DMA_InitStructure4.DMA_PeripheralBaseAddr = (u32)SRC_USART1_DR;
-    DMA_InitStructure4.DMA_MemoryBaseAddr = (u32)(&(USART1_BUF[SENDBUF][0]));
+    DMA_InitStructure4.DMA_MemoryBaseAddr = (u32)(USART12_BUF[0]);
     //设置内存地址为发送缓冲区首地址
     DMA_InitStructure4.DMA_DIR = DMA_DIR_PeripheralDST;
     //方向，从内存到外设,外设是目的地
-    DMA_InitStructure4.DMA_BufferSize = RECEBUFSIZE;
+    DMA_InitStructure4.DMA_BufferSize = SENDBUFSIZE;
     //DMA缓冲大小为发送缓冲大小
     DMA_InitStructure4.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
     //外设地址寄存器不增长,为固定模式
@@ -40,32 +45,36 @@ void dma4_configuration(void)
     //按以上参数执行初始化
 }
 
-//配置DMA5为串口1数据接收
-voiddma5_configuration(void)
+/**
+ * 课本P32
+ * DMA7 配置函数
+ * 通道7为串口2数据发送
+ */
+void dma7_configuration(void)
 {
     DMA_DeInit(DMA1_Channel5); //复位DMA通道5配置
-    DMA_InitStructure5.DMA_PeripheralBaseAddr = (u32)SRC_USART1_DR;
+    DMA_InitStructure7.DMA_PeripheralBaseAddr = (u32)SRC_USART1_DR;
     //设置DMA4外设基地址为串口1发送地址
-    DMA_InitStructure5.DMA_MemoryBaseAddr = (u32)(&USART1_BUF[RECEBUF][0]);
+    DMA_InitStructure7.DMA_MemoryBaseAddr = (u32)(USART12_BUF[1]);
     //设置内存地址为发送缓冲区首地址
-    DMA_InitStructure5.DMA_DIR = DMA_DIR_PeripheralSRC;
+    DMA_InitStructure7.DMA_DIR = DMA_DIR_PeripheralSRC;
     //方向,从外设到内存,外设是源头
-    DMA_InitStructure5.DMA_BufferSize = RECEBUFSIZE;
+    DMA_InitStructure7.DMA_BufferSize = SENDBUFSIZE;
     //DMA缓冲大小为发送缓冲大小
-    DMA_InitStructure5.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure7.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
     //外设地址寄存器不增长,为固定模式
-    DMA_InitStructure5.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure7.DMA_MemoryInc = DMA_MemoryInc_Enable;
     //内存地址每次发送都增加
-    DMA_InitStructure5.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStructure7.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
     //外设按字节发送
-    DMA_InitStructure5.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStructure7.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
     //内存也按字节传输
-    DMA_InitStructure5.DMA_Mode = DMA_Mode_Circular;
+    DMA_InitStructure7.DMA_Mode = DMA_Mode_Circular;
     //DMA循环模式
-    DMA_InitStructure5.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure7.DMA_Priority = DMA_Priority_High;
     //DMA中优先级
-    DMA_InitStructure5.DMA_M2M = DMA_M2M_Disable;
+    DMA_InitStructure7.DMA_M2M = DMA_M2M_Disable;
     //不是内存到内存
-    DMA_Init(DMA1_Channel5, &DMA_InitStructure5);
+    DMA_Init(DMA1_Channel5, &DMA_InitStructure7);
     //按以上参数执行初始化
 }

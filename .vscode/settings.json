@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "dma.h": "c",
-        "bp_config.h": "c"
+        "bp_config.h": "c",
+        "stm32f10x_dma.h": "c",
+        "funcs.h": "c"
     }
 }

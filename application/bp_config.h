@@ -29,7 +29,7 @@
 // button1
 #define button1 GPIO_Pin_8
 #define button1_source GPIO_PinSource8
-#define buttonl_exti_line EXTI_Line8
+#define button1_exti_line EXTI_Line8
 // button2
 #define button2 GPIO_Pin_9
 #define button2_source GPIO_PinSource9

@@ -30,12 +30,39 @@ extern void beep_run(INT8U runtime);
 extern int fun_num;
 extern int flag;
 
-/**
- * DMA 全局变量
- */
+extern u8 USART_NUM; //表示串口编号(即哪一个串口(1或2)发送数据)
 
-extern u8 DMASEND; 
-extern u8 DMARECE; 
+/**
+ * 用以表示串口1(或2)是否处于发送状态
+ * 1:可以进行发送 0:发送完毕
+ * 在main中由该值决定led1(或2)熄灭操作是否执行
+ * while(DMASEND);
+ *    DMASEND = 1; //可以进行发送,等待下一次发送命令
+ *    led1(或2)熄灭;
+ */
+extern u8 DMASEND;
+
+/**
+ * 判断是否产生了点击事件(在button中断响应程序中做改变)
+ * 如果产生了一次点击事件,则is_click标记为1,在main中由该值决定是否执行
+ * if(is_click){
+ *      is_click = 0;
+ *      串口的发送与led的亮起与熄灭;
+ * }
+ */
+extern int is_click;
+/**
+ * 标记当前需要亮起或熄灭的led编号
+ * (在USART1,2的发送缓冲区空中断响应程序中做改变)
+ * 串口1: led_flag = 1, 串口2: led_flag = 2
+ * 通过该值在main中判断,哪一led灯亮起与熄灭
+ * if(led_flag == 1) led1_on();
+ * else led2_on();
+ * if(led_flag == 1) led1_off();
+ * else led2_off();
+ * 
+ */
+extern int led_flag;
 
 /*
 	My functions.
@@ -196,26 +223,29 @@ void EXTI0_IRQHandler(void)
 //	button1,2 中断线路对应的中断服务程序
 void EXTI9_5_IRQHandler(void)
 {
-  if ((EXTI_GetITStatus(buttonl_exti_line) != RESET) | (EXTI_GetITStatus(button2_exti_line) != RESET))
+  if ((EXTI_GetITStatus(button1_exti_line) != RESET) | (EXTI_GetITStatus(button2_exti_line) != RESET))
   {
     delay_ms(20); //消抖
-    if (GPIO_ReadInputDataBit(button_gpio, button2) == 0x00)
-    {
-      fun_num = 1;
-    }
     if (GPIO_ReadInputDataBit(button_gpio, button1) == 0x00)
     {
-      fun_num = 0;
+      USART_NUM = 1; //button1 按下后, 串口1发送数据
+      led_flag = 1;  //led1亮起或熄灭
     }
-    beep_run(200); //来一段蜂鸣声 说明中断响应成功了.
-    EXTI_ClearITPendingBit(buttonl_exti_line);
+    if (GPIO_ReadInputDataBit(button_gpio, button2) == 0x00)
+    {
+      USART_NUM = 2; //button2 按下后, 串口2发送数据
+      led_flag = 2;  //led2亮起或熄灭
+    }
+
+    DMASEND = 1; //将该标志位置为1,表明允许使用DMA发送数据
+
+    EXTI_ClearITPendingBit(button1_exti_line);
     EXTI_ClearITPendingBit(button2_exti_line);
   }
 }
 
-/*
- *	串口通信之中断服务程序
- */
+/**
+//	串口通信之中断服务程序
 void USART1_IRQHandler(void)
 {
   u8 Rece;
@@ -246,27 +276,42 @@ void UART4_IRQHandler(void)
   }
 }
 
-// void DMA1_Channel5_IRQHandler(void)
-// {
+void DMA1_Channel5_IRQHandler(void)
+{
 
-//   u8 t;
-//   if (DMA_GetITStatus(DMA1_IT_TC5)) //通道5传输完成中断
+  u8 t;
+  if (DMA_GetITStatus(DMA1_IT_TC5)) //通道5传输完成中断
 
-//     DMA_ClearITPendingBit(DMA1_IT_GL5); //清除中断等待标志
-//   if (TFT_SUPPORT)
-//     LcdPrintStr("DMAINTERUPED", 50, 200, BLACK, WHITE, 1);
+    DMA_ClearITPendingBit(DMA1_IT_GL5); //清除中断等待标志
+  if (TFT_SUPPORT)
+    LcdPrintStr("DMAINTERUPED", 50, 200, BLACK, WHITE, 1);
 
-//   t = RECEBUF;
-//   RECEBUF = SENDBUF;
-//   SENDBUF = t; //典型的交换
-//   DMA_InitStructure5.DMA_MemoryBaseAddr = (u32)(&(USART1_BUF[RECEBUF][0]));
-//   DMA_Init(DMA1_Channel5, &DMA_InitStructure5); //重新配置缓冲区
-// }
+  t = RECEBUF;
+  RECEBUF = SENDBUF;
+  SENDBUF = t; //典型的交换
+  DMA_InitStructure5.DMA_MemoryBaseAddr = (u32)(&(USART1_BUF[RECEBUF][0]));
+  DMA_Init(DMA1_Channel5, &DMA_InitStructure5); //重新配置缓冲区
+}
+*/
 
+/**
+ * 课本P32: DMA1通道4 对应USART1_TX(即发送)
+ * 发送完成后触发该中断
+ */
 void DMA1_Channel4_IRQHandler(void)
 {
   DMA_ClearITPendingBit(DMA1_IT_TC4); //清除中断标志
-  DMASEND = 0;                        //通知主程序,数据发送刚刚完成
+  DMASEND = 0;                        //通知主程序,数据发送已完成
+}
+
+/**
+ * 课本P32: DMA1通道7 对应USART2_TX(即发送)
+ * 发送完成后触发该中断
+ */
+void DMA1_Channel7_IRQHandler(void)
+{
+  DMA_ClearITPendingBit(DMA1_IT_TC7); //清除中断标志
+  DMASEND = 0;                        //通知主程序,数据发送已完成
 }
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
