@@ -2,6 +2,7 @@
 #define __BPCONFIG_H
 
 #include <include.h>
+#include <usart.h>
 
 #define led_gpio GPIOC
 #define beep_gpio GPIOE //蜂鸣器在E组端口
@@ -60,5 +61,7 @@ void delay_ms(INT8U ms);
 #define spi3_mosi GPIO_Pin_5
 #define spi3_miso GPIO_Pin_4
 #define spi3_cs GPIO_Pin_11
+
+#define SRC_USART1_DR (&(USART1 -> DR)) 
 
 #endif

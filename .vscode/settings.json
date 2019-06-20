@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "dma.h": "c",
+        "bp_config.h": "c"
+    }
+}

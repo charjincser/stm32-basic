@@ -6,7 +6,4 @@
 #include <bp_config.h>
 
 
-#define RECEBUFSIZE 100
-#define SENDBUF 100
-
 #endif

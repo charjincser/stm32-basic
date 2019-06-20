@@ -1,5 +1,17 @@
 #include <dma.h>
 
+extern DMA_InitTypeDef DMA_InitStructure4;
+extern DMA_InitTypeDef DMA_InitStructure5;
+extern USART1_BUF;
+
+extern u8 RECEBUF; //目前接收缓冲
+extern u8 SENDBUF; //目前发送缓冲
+extern u8 DMASEND; //0表示目前DMA不在发送状态
+                   //I表示在发送
+extern u8 DMARECE; //0表示串口接收DMA中断未发生，即从上次接收到一组数据并处理后，未接收完一组新的数据
+                   //I表示串口 DMA中断刚发生,数据等待处理
+extern u8 RECEBUFSIZE;
+
 void dma4_configuration(void)
 {
     DMA_DeInit(DMA1_Channel4);
@@ -8,7 +20,7 @@ void dma4_configuration(void)
     //设置内存地址为发送缓冲区首地址
     DMA_InitStructure4.DMA_DIR = DMA_DIR_PeripheralDST;
     //方向，从内存到外设,外设是目的地
-    DMA_InitStructure4.DMA.BufferSize = RECEBUFSIZE;
+    DMA_InitStructure4.DMA_BufferSize = RECEBUFSIZE;
     //DMA缓冲大小为发送缓冲大小
     DMA_InitStructure4.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
     //外设地址寄存器不增长,为固定模式
@@ -20,7 +32,7 @@ void dma4_configuration(void)
     //内存也按字节传输
     DMA_InitStructure4.DMA_Mode = DMA_Mode_Normal;
     //DMA常规模式
-    DMA_InitStructure4.DMA_PriorityPMA_Priority_High;
+    DMA_InitStructure4.DMA_Priority = DMA_Priority_High;
     //DMA中优先级
     DMA_InitStructure4.DMA_M2M = DMA_M2M_Disable;
     //不是内存到内存

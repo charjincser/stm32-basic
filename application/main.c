@@ -13,6 +13,7 @@ extern void show_led_twinkle(void);
 extern void show_led_13_24(void);
 
 int fun_num = 0; // 0 1 2 不同的序号代表执行不同的功能.
+const int RECEBUFSIZE = 100;
 
 //全局变量定义
 u8 USART1_BUF[2][RECEBUFSIZE]; //缓冲区，二维数组

@@ -30,6 +30,13 @@ extern void beep_run(INT8U runtime);
 extern int fun_num;
 extern int flag;
 
+/**
+ * DMA 全局变量
+ */
+
+extern u8 DMASEND; 
+extern u8 DMARECE; 
+
 /*
 	My functions.
  */
@@ -239,26 +246,26 @@ void UART4_IRQHandler(void)
   }
 }
 
-void DMA1_Channel5_IRQHandler(void)
-{
+// void DMA1_Channel5_IRQHandler(void)
+// {
 
-  u8 t;
-  if (DMA_GetITStatus(DMA1_IT_TC5)) //通道5传输完成中断
+//   u8 t;
+//   if (DMA_GetITStatus(DMA1_IT_TC5)) //通道5传输完成中断
 
-    DMA_ClearITPendingBit(DMA1_IT_GL5); //清除中断等待标志
-  if (TFT_SUPPORT)
-    LcdPrintStr("DMAINTERUPED", 50, 200, BLACK, WHITE, 1);
+//     DMA_ClearITPendingBit(DMA1_IT_GL5); //清除中断等待标志
+//   if (TFT_SUPPORT)
+//     LcdPrintStr("DMAINTERUPED", 50, 200, BLACK, WHITE, 1);
 
-  t = RECEBUF;
-  RECEBUF = SENDBUF;
-  SENDBUF = t; //典型的交换
-  DMA_InitStructure5.DMA_MemoryBaseAddr = (u32)(&(USART1_BUF[RECEBUF][0]));
-  DMA_Init(DMA1_Channel5, &DMA_InitStructure5); //重新配置缓冲区
-}
+//   t = RECEBUF;
+//   RECEBUF = SENDBUF;
+//   SENDBUF = t; //典型的交换
+//   DMA_InitStructure5.DMA_MemoryBaseAddr = (u32)(&(USART1_BUF[RECEBUF][0]));
+//   DMA_Init(DMA1_Channel5, &DMA_InitStructure5); //重新配置缓冲区
+// }
 
 void DMA1_Channel4_IRQHandler(void)
 {
-  DMA_ClearITPendiₙgBit(DMA1_IT_TC4); //清除中断标志
+  DMA_ClearITPendingBit(DMA1_IT_TC4); //清除中断标志
   DMASEND = 0;                        //通知主程序,数据发送刚刚完成
 }
 
