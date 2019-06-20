@@ -1,4 +1,4 @@
-#include <include.h>
+/*#include <include.h>
 void spiflash_write2page(u8 *buf,u32 startaddr,u16 len){
 	u16 i;
 	if(len > 256){
@@ -45,4 +45,4 @@ void spiflash_read2buf(u8 * buf,u32 startaddr, u16 len){
 		buf[i] = spiflash_sendrece(0XFF);
 	}
 	spiflash_disable;
-}
+}*/

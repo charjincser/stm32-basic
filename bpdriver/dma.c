@@ -5,10 +5,7 @@
 // extern u8 USART1_BUF[][RECRBUFSIZE];
 // extern DMA_InitTypeDef DMA_InitStructure5;
 
-extern u8 SENDBUF_INDEX; //这里表示将哪一段用作发送缓冲区
-extern SENDBUFSIZE;      //发送缓冲区大小
-
-extern char USART12_BUF[][SENDBUFSIZE];
+extern char USART12_BUF[][15];
 extern DMA_InitTypeDef DMA_InitStructure4;
 extern DMA_InitTypeDef DMA_InitStructure7;
 

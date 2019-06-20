@@ -3,8 +3,6 @@
 #include <funcs.h>
 #include <dma.h>
 
-const int SENDBUFSIZE = 15; //usart1发送缓冲区的大小
-
 extern void led_init(void);
 extern void key_init(void);
 extern void clock_config(void);
@@ -22,7 +20,7 @@ char USART12_BUF[][SENDBUFSIZE] = {"press button1", "press button2"};
 	u8 DMASEND = 0; //0表示目前DMA不在发送状态 1表示在发送
 	u8 DMARECE = 0; //0表示串口接收DMA中断未发生，即从上次接收到一组数据并处理后，未接收完一组新的数据 1表示串口 DMA中断刚发生,数据等待处理
 */
-u8 USART_NUM;   //表示串口编号(即哪一个串口(1或2)发送数据)
+int USART_NUM;   //表示串口编号(即哪一个串口(1或2)发送数据)
 u8 DMASEND = 0; // 1:处于发送状态, 0:不在发送状态(已发送完成)
 
 DMA_InitTypeDef DMA_InitStructure4; //串口1发送
@@ -58,10 +56,3 @@ int main(void)
 		delay_ms(100);
 	}
 }
-
-// if (fun_num == 0)
-// 	show_led_flow();
-// if (fun_num == 1)
-// 	show_led_twinkle();
-// if (fun_num == 2)
-// 	show_led_13_24();

@@ -478,9 +478,14 @@
               <FilePath>..\bpdriver\usart.h</FilePath>
             </File>
             <File>
-              <FileName>spiflash.c</FileName>
+              <FileName>dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\bpdriver\spiflash.c</FilePath>
+              <FilePath>..\bpdriver\dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\bpdriver\dma.h</FilePath>
             </File>
           </Files>
         </Group>

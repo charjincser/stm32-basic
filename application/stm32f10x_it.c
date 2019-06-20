@@ -27,10 +27,8 @@
 
 extern INT8U delaytime;
 extern void beep_run(INT8U runtime);
-extern int fun_num;
-extern int flag;
 
-extern u8 USART_NUM; //表示串口编号(即哪一个串口(1或2)发送数据)
+extern int USART_NUM; //表示串口编号(即哪一个串口(1或2)发送数据)
 
 /**
  * 用以表示串口1(或2)是否处于发送状态
@@ -203,6 +201,7 @@ void SysTick_Handler(void)
   * @}
   */
 
+/*
 //	wakeup 中断线路对应的中断服务程序
 void EXTI0_IRQHandler(void)
 {
@@ -219,6 +218,7 @@ void EXTI0_IRQHandler(void)
     }
   }
 }
+*/
 
 //	button1,2 中断线路对应的中断服务程序
 void EXTI9_5_IRQHandler(void)

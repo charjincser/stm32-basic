@@ -15,7 +15,7 @@ void led_on(int index)
 		case 2 : GPIO_SetBits(led_gpio, 0x0080);break;	// 0000 0000 1000 0000
 		case 3 : GPIO_SetBits(led_gpio, 0x0100);break;	// 0000 0001 0000 0000
 		case 4 : GPIO_SetBits(led_gpio, 0x0200);break;	// 0000 0010 0000 0000
-		default:
+		default: break;
 	}
 }
 

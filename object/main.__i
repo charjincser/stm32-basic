@@ -1,6 +1,0 @@
--c --cpu Cortex-M3 -g -O0 --apcs=interwork -I ..\application -I ..\bpdriver -I ..\object -I ..\stm32lib\inc -I ..\stm32lib\m3 -I ..\stm32lib\src
--I.\RTE\_201617025115______
--ID:\APP\Other\Keil_v5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include
--ID:\APP\Other\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include
--D__UVISION_VERSION="527" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD
--o ..\object\main.o --omf_browse ..\object\main.crf --depend ..\object\main.d "main.c"
