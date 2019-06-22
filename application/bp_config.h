@@ -4,24 +4,15 @@
 #include <include.h>
 #include <usart.h>
 
+/**
+ * LED
+ */
 #define led_gpio GPIOC
-#define beep_gpio GPIOE //蜂鸣器在E组端口
 #define led1 GPIO_Pin_6
 #define led2 GPIO_Pin_7
-#define led3 GPIO_Pin_8
-#define led4 GPIO_Pin_9
-#define beep GPIO_Pin_0
 
-// Wakeup
-#define button_wakeup_gpio GPIOA //gpio A组端口
-#define button_wakeup GPIO_Pin_0 //A组端口的0号引脚
-#define button_wakeup_port_source GPIO_PortSourceGPIOA
-#define button_wakeup_source GPIO_PinSource0
-#define button_wakeup_exti_line EXTI_Line0
-#define button_wakeup_irqn EXTI0_IRQn //中断响应的入口为0号
-
-/*
- *	Button
+/**
+ * BUTTON
  */
 #define button_gpio GPIOB
 #define button_port_source GPIO_PortSourceGPIOB
@@ -34,6 +25,12 @@
 #define button2 GPIO_Pin_9
 #define button2_source GPIO_PinSource9
 #define button2_exti_line EXTI_Line9
+
+/**
+ * USART
+ */
+#define SRC_USART1_DR (&(USART1->DR))
+#define SRC_USART2_DR (&(USART2->DR))
 
 void exti_config(void);
 void delay_ms(INT8U ms);
@@ -61,8 +58,5 @@ void delay_ms(INT8U ms);
 #define spi3_mosi GPIO_Pin_5
 #define spi3_miso GPIO_Pin_4
 #define spi3_cs GPIO_Pin_11
-
-#define SRC_USART1_DR (&(USART1->DR))
-#define SRC_USART2_DR (&(USART2->DR))
 
 #endif

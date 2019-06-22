@@ -19,32 +19,12 @@ void exti_config(void)
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
 	EXTI_Init(&EXTI_InitStructure);
 
-	/* 
-		EXTI_InitStructure.EXTI_Line = button_wakeup_exti_line;
-		EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;	//模式为中断
-		EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿触发中断
-		EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-		EXTI_Init(&EXTI_InitStructure);
-	*/
-
 	// button 设置外部中断通道和优先级
 	NVIC_InitStructure.NVIC_IRQChannel = button_irqn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
-
-	/* 
-		NVIC_InitStructure.NVIC_IRQChannel = button_wakeup_irqn;
-		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x0;
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x0E;
-		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-		NVIC_Init(&NVIC_InitStructure);
-	*/
-
-	/**
-	 * 由此断开  哈哈
-	 */
 
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
@@ -60,13 +40,9 @@ void exti_config(void)
 	NVIC_Init(&NVIC_InitStructure);
 	//设置DMAI通道4先占优先级1,子优先级2,使能！不让它们互相抢占！
 
-	// USART_DMACmd(USART1, USART_DMAReq_Rx | USART_DMAReq_Tx, ENABLE);
 	USART_DMACmd(USART1, USART_DMAReq_Tx, ENABLE);
 	USART_DMACmd(USART2, USART_DMAReq_Tx, ENABLE);
 	//只开启DMA方式的串口1,2的发送
-
-	// DMA_Cmd(DMA1_Channel5, ENABLE);
-	// 不启动DMA接收 哈哈
 
 	DMA_ITConfig(DMA1_Channel7, DMA_IT_TC, ENABLE);
 	DMA_ITConfig(DMA1_Channel4, DMA_IT_TC, ENABLE);

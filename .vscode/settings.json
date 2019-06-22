@@ -3,6 +3,8 @@
         "dma.h": "c",
         "bp_config.h": "c",
         "stm32f10x_dma.h": "c",
-        "funcs.h": "c"
+        "funcs.h": "c",
+        "led.h": "c",
+        "include.h": "c"
     }
 }
