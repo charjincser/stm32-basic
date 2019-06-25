@@ -44,13 +44,6 @@ void usart1_init(INT32U Baud)
 
 	//解决第一个字符不能发送
 	USART_GetFlagStatus(USART1, USART_FLAG_TC);
-
-	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x0; //从优先级等级最高
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		 //IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);						 // 初始化外设NVIC寄存器
-
-	USART_ITConfig(USART1, USART_IT_TXE, ENABLE); //串口2中断寄存器空时产生中断,这里即发送寄存器为空(数据发送完毕)
 }
 
 void usart2_init(INT32U Baud)
@@ -79,13 +72,6 @@ void usart2_init(INT32U Baud)
 
 	//清除接收中断,防止第一个字节无法发送的问题
 	USART_GetFlagStatus(USART2, USART_FLAG_TC);
-
-	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-
-	USART_ITConfig(USART2, USART_IT_TXE, ENABLE); //串口2中断寄存器空时产生中断,这里即发送寄存器为空(数据发送完毕)
 }
 
 void uart4_init(INT32U Baud)
@@ -121,11 +107,4 @@ void uart4_init(INT32U Baud)
 
 	//清除接收中断,防止第一个字节无法发送的问题
 	USART_GetFlagStatus(UART4, USART_FLAG_TC);
-
-	NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-
-	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE); //中断寄存器满时产生中断
 }
