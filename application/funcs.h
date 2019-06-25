@@ -9,6 +9,6 @@ void show_led_twinkle(void); //闪烁显示
 void show_led_13_24(void);   //点击按键13,24灯交替亮起
 
 void led_on(int index);
-void led_all_off();
+void led_all_off(void);
 
 #endif
